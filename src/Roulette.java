@@ -15,6 +15,8 @@ public class Roulette {
         if (money > 100) {
             System.out.println("☺");
         }
+        System.out.println("Here are your " + money + " chips.");
+        System.out.println();
 
         Random fortuna = new Random();
         boolean wantToLeave = false;
