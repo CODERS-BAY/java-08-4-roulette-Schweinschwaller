@@ -79,7 +79,7 @@ public class Roulette {
     public static int cardValue(ArrayList<Integer> cards) {
         int value = 0;
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) >= 1 || cards.get(i) >= 10) {
+            if (cards.get(i) >= 1 || cards.get(i) <= 10) {
                 value += cards.get(i);
             } else if (cards.get(i) > 10 || cards.get(i) > 14) {
                 value += 10;
@@ -96,13 +96,11 @@ public class Roulette {
 
     public static int playBlackJack(int money, Scanner s, Random fortuna) {
 
-        int setCommitment = 0;
-
-        ArrayList<Integer> playerCards = new ArrayList<Integer>();
-        ArrayList<Integer> dealerCards = new ArrayList<Integer>();
-
         BlackJack:
         do {
+            int setCommitment = 0;
+            ArrayList<Integer> playerCards = new ArrayList<Integer>();
+            ArrayList<Integer> dealerCards = new ArrayList<Integer>();
             do {
                 System.out.println("how much you want to set?");
                 setCommitment = s.nextInt();
@@ -121,9 +119,11 @@ public class Roulette {
 
             System.out.println("Dealer Cards:");
             printCards(dealerCards, fortuna);
+            System.out.println("Dealer have " + dealerHandValue);
             System.out.println();
             System.out.println("Your Cards:");
             printCards(playerCards, fortuna);
+            System.out.println("You have " + playerHandValue);
             System.out.println("\n-----------");
 
             int menu = 0;
@@ -132,7 +132,6 @@ public class Roulette {
 
             playerAction:
             do {
-
                 do {
                     System.out.println("1. draw");
                     System.out.println("2. stand");
@@ -171,7 +170,6 @@ public class Roulette {
                 if (playerHandValue > 21) {
                     playerDone = true;
                 }
-
             } while (!playerDone);
 
             // DealerAction
@@ -220,7 +218,6 @@ public class Roulette {
     }
 
     public static int playRoulette(int money, Scanner s, Random fortuna) {
-
         int setCommitment = 0;
         int menu = 0;
         int chosenNumber = 0;
@@ -295,6 +292,4 @@ public class Roulette {
 
         return money;
     }
-
-
 }
