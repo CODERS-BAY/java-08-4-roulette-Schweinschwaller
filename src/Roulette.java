@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -40,26 +41,25 @@ public class Roulette {
     }
 
     public static int drawCard(Random fortuna) {
-        return fortuna.nextInt(13) + 1;
+        return fortuna.nextInt(13);
     }
 
     public static void printCards(ArrayList<Integer> cards, Random fortuna) {
         for (int i = 0; i < cards.size(); i++) {
             switch (cards.get(i)) {
-                case 1 -> System.out.print("|1|");
-                case 2 -> System.out.print("|2|");
-                case 3 -> System.out.print("|3|");
-                case 4 -> System.out.print("|4|");
-                case 5 -> System.out.print("|5|");
-                case 6 -> System.out.print("|6|");
-                case 7 -> System.out.print("|7|");
-                case 8 -> System.out.print("|8|");
-                case 9 -> System.out.print("|9|");
-                case 10 -> System.out.print("|10|");
-                case 11 -> System.out.print("|J|");
-                case 12 -> System.out.print("|D|");
-                case 13 -> System.out.print("|K|");
-                case 14 -> {
+                case 0 -> System.out.print("|2|");
+                case 1 -> System.out.print("|3|");
+                case 2 -> System.out.print("|4|");
+                case 3 -> System.out.print("|5|");
+                case 4 -> System.out.print("|6|");
+                case 5 -> System.out.print("|7|");
+                case 6 -> System.out.print("|8|");
+                case 7 -> System.out.print("|9|");
+                case 8 -> System.out.print("|10|");
+                case 9 -> System.out.print("|J|");
+                case 10 -> System.out.print("|D|");
+                case 11 -> System.out.print("|K|");
+                case 12 -> {
                     int help = fortuna.nextInt(4);
                     if (help == 0) {
                         System.out.print("|♥|");
@@ -78,10 +78,11 @@ public class Roulette {
 
     public static int cardValue(ArrayList<Integer> cards) {
         int value = 0;
+        Collections.sort(cards);
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) >= 1 || cards.get(i) <= 10) {
-                value += cards.get(i);
-            } else if (cards.get(i) > 10 || cards.get(i) > 14) {
+            if (cards.get(i) >= 0 && cards.get(i) <= 7) {
+                value += cards.get(i) + 2;
+            } else if (cards.get(i) > 7 && cards.get(i) <= 11) {
                 value += 10;
             } else {
                 if (value <= 10) {
@@ -117,21 +118,18 @@ public class Roulette {
             dealerCards.add(drawCard(fortuna));
             int dealerHandValue = cardValue(dealerCards);
 
-            System.out.println("Dealer Cards:");
+            System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
             printCards(dealerCards, fortuna);
-            System.out.println("Dealer have " + dealerHandValue);
             System.out.println();
-            System.out.println("Your Cards:");
+            System.out.println("Your Cards: ( " + playerHandValue + " )");
             printCards(playerCards, fortuna);
-            System.out.println("You have " + playerHandValue);
             System.out.println("\n-----------");
 
             int menu = 0;
-            int input = 0;
             boolean playerDone = false;
-
             playerAction:
             do {
+                int input = 0;
                 do {
                     System.out.println("1. draw");
                     System.out.println("2. stand");
@@ -146,14 +144,15 @@ public class Roulette {
                     input = s.nextInt();
                 } while (input > menu && input < 1);
 
-                switch (menu) {
+                switch (input) {
                     case 1 -> {
                         playerCards.add(drawCard(fortuna));
                         playerHandValue = cardValue(playerCards);
-                        System.out.println("Dealer Cards:");
+
+                        System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
                         printCards(dealerCards, fortuna);
                         System.out.println();
-                        System.out.println("Your Cards:");
+                        System.out.println("Your Cards: ( " + playerHandValue + " )");
                         printCards(playerCards, fortuna);
                         System.out.println("\n-----------");
                     }
@@ -169,14 +168,26 @@ public class Roulette {
                 }
                 if (playerHandValue > 21) {
                     playerDone = true;
+                } else if (playerHandValue == 21) {
+                    if (playerCards.size() == 2) {
+                        System.out.println("BLACK JACK!");
+                    }
+                    playerDone = true;
                 }
             } while (!playerDone);
+            System.out.println();
+            System.out.println("-----------------------------");
+            System.out.println("Your Cards: ( " + playerHandValue + " )");
+            printCards(playerCards, fortuna);
+            System.out.println();
+            System.out.println("-----------------------------");
 
+            System.out.println("Dealer's turn");
             // DealerAction
             while (dealerHandValue < 17) {
                 dealerCards.add(drawCard(fortuna));
                 dealerHandValue = cardValue(dealerCards);
-                System.out.println("Dealer Cards:");
+                System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
                 printCards(dealerCards, fortuna);
                 System.out.println();
                 System.out.println("-----------");
@@ -184,24 +195,30 @@ public class Roulette {
 
             System.out.println("Dealer have " + dealerHandValue);
             System.out.println("You have " + playerHandValue);
+            System.out.print(" --- ");
 
-            if (dealerHandValue > 21) {
-                System.out.println("you win");
+            if (playerHandValue > 21) {
+                System.out.print("dealer wins");
+            } else if (dealerHandValue > 21) {
+                System.out.print("you wins " + (setCommitment * 2) + "$");
                 money += setCommitment * 2;
             } else if (dealerHandValue == 21 && playerHandValue != 21) {
-                System.out.println("you lose");
-            } else if (dealerHandValue == 21 && playerHandValue == 21) {
-                System.out.println("draw");
+                System.out.print("dealer wins");
+            } else if (dealerHandValue == playerHandValue) {
+                System.out.print("draw");
                 money += setCommitment;
             } else if (playerHandValue > 21) {
-                System.out.println("you lose");
+                System.out.print("dealer wins");
             } else if (playerHandValue == 21) {
-                System.out.println("you win");
+                System.out.print("you wins " + ((setCommitment * 3) / 2) + "$");
                 money += (setCommitment * 3) / 2;
             } else if (playerHandValue > dealerHandValue) {
-                System.out.println("you win");
+                System.out.print("you wins " + (setCommitment * 2) + "$");
                 money += setCommitment * 2;
+            } else {
+                System.out.print("dealer wins");
             }
+            System.out.println(" --- ");
 
             System.out.println("Do you want to continue?(Y/N)");
             s.nextLine();
