@@ -5,15 +5,14 @@ import java.util.Random;
 public class Roulette {
     public static void main(String[] args) {
 
-        System.out.println(" $$$ Welcome to George's Casino $$$ ");
-        System.out.println("------------------------------------");
+        System.out.println("##########################################################");
+        System.out.println("#           $$$ Welcome to George's Casino $$$           #");
+        System.out.println("##########################################################");
         System.out.println();
         System.out.println("How much money do you want to change in chips?!");
-        //Scanner s = new Scanner(System.in);
-        GScanner gs = new GScanner();
-        //int money = s.nextInt();
-        int money = gs.nextInt();
 
+        GScanner gs = new GScanner();
+        int money = gs.nextInt();
         if (money > 100) {
             System.out.println("☺");
         }
@@ -128,8 +127,8 @@ public class Roulette {
             if (dealerCards.get(0) >= 8) {
                 System.out.println("The Dealer have 10 and coud have a ACE next.");
                 System.out.println("Do you want to playe save and get the half of you commitment back? (Y/N)");
-                //s.nextLine();
-                playerDone = "yY".contains(gs.nextLine());
+                // nextYN: yes = true, no =false
+                playerDone = gs.nextYN();
                 if (playerDone) {
                     money += setCommitment / 2;
                 }
@@ -237,14 +236,13 @@ public class Roulette {
                 System.out.print("dealer wins");
             }
             System.out.println(" --- ");
-
             System.out.println("Do you want to continue?(Y/N)");
-            //s.nextLine();
-            String str = gs.nextLine();
-            if (str.contains("n") || str.contains("N")) {
+            // nextYN: yes = true, no =false
+            if (!gs.nextYN()) {
                 break BlackJack;
             }
         } while (money > 0);
+
         System.out.println("You are leaving the black jack table.");
         System.out.println("We hope you had a good time!");
         System.out.println("\nYou have " + money + "$");

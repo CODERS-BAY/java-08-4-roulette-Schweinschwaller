@@ -51,4 +51,33 @@ public class GScanner {
         return ' ';
     }
 
+    public boolean nextYN() {
+        this.inputStr = this.s.nextLine();
+
+        if (inputStr.toLowerCase().contains("yes")) {
+            return true;
+        } else if (inputStr.toLowerCase().contains("no")) {
+            return false;
+        } else if (inputStr.toLowerCase().contains("y")) {
+            return true;
+        } else if (inputStr.toLowerCase().contains("n")) {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean nextBoolean() {
+        this.inputStr = this.s.nextLine();
+
+        if (inputStr.toLowerCase().contains("true")) {
+            return true;
+        } else if (inputStr.toLowerCase().contains("false")) {
+            return false;
+        } else if (inputStr.toLowerCase().contains("t") || inputStr.toLowerCase().contains("1")) {
+            return true;
+        } else if (inputStr.toLowerCase().contains("f") || inputStr.toLowerCase().contains("0")) {
+            return false;
+        }
+        return false;
+    }
 }
