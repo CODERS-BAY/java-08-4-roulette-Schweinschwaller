@@ -40,6 +40,9 @@ public class Roulette {
         } while (!wantToLeave);
     }
 
+    //####################################//
+//   Black Jack                       //
+//####################################//
     public static int drawCard(Random fortuna) {
         return fortuna.nextInt(13);
     }
@@ -75,15 +78,23 @@ public class Roulette {
             System.out.print("  ");
         }
     }
-
     public static int cardValue(ArrayList<Integer> cards) {
+        // in Black Jack the Cards from 2 until 10 have the value of it self.
+        // J D K have the value of 10
+        // the ace have the value of 1 or 11
+        // there are 13 cards 2,3,4,5,6,7,8,9,10,J,D,K,♦
         int value = 0;
+        // with sort of the cards a ace will be at the and of the cards
         Collections.sort(cards);
         for (int i = 0; i < cards.size(); i++) {
+            //draw a Card gives a number [0-12] => 0 == |2| 1 == |3| 2 == |4| ....
             if (cards.get(i) >= 0 && cards.get(i) <= 7) {
+                // the random number +2 is the value of the card
                 value += cards.get(i) + 2;
+                // 10,J,D,K add 10 to the value
             } else if (cards.get(i) > 7 && cards.get(i) <= 11) {
                 value += 10;
+                // the ace!!! can have the value of 1 or 11
             } else {
                 if (value <= 10) {
                     value += 11;
@@ -94,13 +105,12 @@ public class Roulette {
         }
         return value;
     }
-
     public static int playBlackJack(int money, GScanner gs, Random fortuna) {
 
         System.out.println("\n".repeat(20));
-        System.out.println("##########################################################");
-        System.out.println("#               Wellcome to Black Jack                   #");
-        System.out.println("##########################################################");
+        System.out.println("#########################################################");
+        System.out.println("#               Welcome to Black Jack                   #");
+        System.out.println("#########################################################");
         System.out.println();
 
         BlackJack:
@@ -127,7 +137,7 @@ public class Roulette {
             // if the dealer have the change of a Black Jack you can exit with the half of your commitment
             boolean playerDone = false;
             if (dealerCards.get(0) >= 8) {
-                System.out.println("The Dealer have the change of a Black Jack");
+                System.out.println("The Dealer have the chance of a Black Jack");
                 System.out.println("Do you want to surrender and get the half of you commitment back? (Y/N)");
                 // nextYN: yes == true, no == false
                 playerDone = gs.nextYN();
@@ -241,6 +251,7 @@ public class Roulette {
                 System.out.print("dealer wins");
             }
             System.out.println(" --- ");
+            System.out.println("You have now " + money + "$");
             System.out.println("Do you want to continue?(Y/N)");
             // nextYN: yes == true, no == false
             if (!gs.nextYN()) {
@@ -255,12 +266,15 @@ public class Roulette {
         return money;
     }
 
+    //####################################//
+//   Roulette                         //
+//####################################//
     public static int playRoulette(int money, GScanner gs, Random fortuna) {
 
         System.out.println("\n".repeat(20));
-        System.out.println("##########################################################");
-        System.out.println("#                Wellcome to ROULETTE                    #");
-        System.out.println("##########################################################");
+        System.out.println("#########################################################");
+        System.out.println("#                Welcome to ROULETTE                    #");
+        System.out.println("#########################################################");
         System.out.println();
 
         Roulette:
@@ -286,7 +300,7 @@ public class Roulette {
                 System.out.println("5. third third (25-36)");
                 System.out.println("6. number (0-36)");
                 menu = gs.nextInt();
-                if (setCommitment == -1) {
+                if (menu == -1) {
                     break Roulette;
                 }
             } while (menu <= 0 || menu > 6);
@@ -294,7 +308,7 @@ public class Roulette {
             int chosenNumber = 0;
             if (menu == 6) {
                 do {
-                    System.out.println("Witch number?");
+                    System.out.println("Which number?");
                     chosenNumber = gs.nextInt();
                     if (setCommitment == -1) {
                         break Roulette;
@@ -302,34 +316,43 @@ public class Roulette {
                 } while (chosenNumber < 0 || chosenNumber > 36);
             }
             System.out.println("Rien ne va plus(No more bets)");
+
             // spin the bullet
+            System.out.println("##############");
+            System.out.print("#  ");
             int fortunaChoice = fortuna.nextInt(37);
-            System.out.print("\n" + fortunaChoice + " ");
+            System.out.print(fortunaChoice + " ");
             if (fortunaChoice == 0) {
             } else if (fortunaChoice % 2 == 0) {
-                System.out.println("black ");
+                System.out.println("black  #");
             } else {
-                System.out.println("red ");
+                System.out.println("red    #");
             }
+            System.out.println("##############");
             System.out.println("is the Winning number!!");
 
             // evaluation of the number and the players bet
             if (menu == 6 && chosenNumber == fortunaChoice) {
+                System.out.println("you have won " + (setCommitment * 36) + "$");
                 money += setCommitment * 36;
             } else if (menu == 3 && (fortunaChoice <= 12 && fortunaChoice >= 1)) {
+                System.out.println("you have won " + (setCommitment * 3) + "$");
                 money += setCommitment * 3;
             } else if (menu == 4 && (fortunaChoice <= 24 && fortunaChoice >= 13)) {
+                System.out.println("you have won " + (setCommitment * 3) + "$");
                 money += setCommitment * 3;
             } else if (menu == 5 && (fortunaChoice <= 36 && fortunaChoice >= 25)) {
+                System.out.println("you have won " + (setCommitment * 3) + "$");
                 money += setCommitment * 3;
-            } else if (menu == 1 && fortunaChoice % 2 != 0) {
+            } else if (menu == 1 && fortunaChoice % 2 != 0 && fortunaChoice != 0) {
+                System.out.println("you have won " + (setCommitment * 2) + "$");
                 money += setCommitment * 2;
-            } else if (menu == 2 && fortunaChoice % 2 == 0) {
+            } else if (menu == 2 && fortunaChoice % 2 == 0 && fortunaChoice != 0) {
+                System.out.println("you have won " + (setCommitment * 2) + "$");
                 money += setCommitment * 2;
             }
             System.out.println("---------------------------");
             System.out.println("You have now " + money + "$");
-            System.out.println("---------------------------");
             System.out.println("Do you want to continue?(Y/N)");
             // nextYN: yes == true, no == false
             if (!gs.nextYN()) {
