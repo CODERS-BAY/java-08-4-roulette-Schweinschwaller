@@ -16,7 +16,7 @@ public class Roulette {
         if (money > 100) {
             System.out.println("☺");
         }
-        System.out.println("Here are your " + money + " chips.");
+        System.out.println("Here are your chips in worth of " + money + "$");
         System.out.println();
 
         Random fortuna = new Random();
@@ -127,8 +127,8 @@ public class Roulette {
             // if the dealer have the change of a Black Jack you can exit with the half of your commitment
             boolean playerDone = false;
             if (dealerCards.get(0) >= 8) {
-                System.out.println("The Dealer have 10 and coud have a ACE next.");
-                System.out.println("Do you want to playe save and get the half of you commitment back? (Y/N)");
+                System.out.println("The Dealer have the change of a Black Jack");
+                System.out.println("Do you want to surrender and get the half of you commitment back? (Y/N)");
                 // nextYN: yes == true, no == false
                 playerDone = gs.nextYN();
                 if (playerDone) {
@@ -145,56 +145,57 @@ public class Roulette {
             printCards(playerCards, fortuna);
             System.out.println("\n-----------");
 
-            int menu = 0;
-            playerAction:
-            while (!playerDone) {
-                int input = 0;
-                do {
-                    System.out.println("1. draw");
-                    System.out.println("2. stand");
-                    if (playerCards.get(0) == playerCards.get(1)) {
-                        System.out.println("3. split");
-                        menu = 3;
-                    }
-                    if (playerCards.size() == 2 && money >= 2 * setCommitment) {
-                        System.out.println("4. double");
-                        menu = 4;
-                    }
-                    input = gs.nextInt();
-                } while (input > menu && input < 1);
+            if (playerHandValue == 21 && playerCards.size() == 2) {
+                System.out.println("BLACK JACK!");
+            } else {
+                int menu = 0;
+                playerAction:
+                while (!playerDone) {
+                    int input = 0;
+                    do {
+                        System.out.println("1. hit");
+                        System.out.println("2. stand");
+                        if (playerCards.get(0) == playerCards.get(1)) {
+                            System.out.println("3. split");
+                            menu = 3;
+                        }
+                        if (playerCards.size() == 2 && money >= 2 * setCommitment) {
+                            System.out.println("4. double down");
+                            menu = 4;
+                        }
+                        input = gs.nextInt();
+                    } while (input > menu && input < 1);
 
-                switch (input) {
-                    case 1 -> {
-                        playerCards.add(drawCard(fortuna));
-                        playerHandValue = cardValue(playerCards);
+                    switch (input) {
+                        case 1 -> {
+                            playerCards.add(drawCard(fortuna));
+                            playerHandValue = cardValue(playerCards);
 
-                        System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
-                        printCards(dealerCards, fortuna);
-                        System.out.println();
-                        System.out.println("Your Cards: ( " + playerHandValue + " )");
-                        printCards(playerCards, fortuna);
-                        System.out.println("\n-----------");
+                            System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
+                            printCards(dealerCards, fortuna);
+                            System.out.println();
+                            System.out.println("Your Cards: ( " + playerHandValue + " )");
+                            printCards(playerCards, fortuna);
+                            System.out.println("\n-----------");
+                        }
+                        case 2 -> playerDone = true;
+                        case 3 -> System.out.println("TODO");
+                        case 4 -> {
+                            money -= setCommitment;
+                            setCommitment *= 2;
+                            playerCards.add(drawCard(fortuna));
+                            playerHandValue = cardValue(playerCards);
+                            break playerAction;
+                        }
                     }
-                    case 2 -> playerDone = true;
-                    case 3 -> System.out.println("TODO");
-                    case 4 -> {
-                        money -= setCommitment;
-                        setCommitment *= 2;
-                        playerCards.add(drawCard(fortuna));
-                        playerHandValue = cardValue(playerCards);
-                        break playerAction;
+                    if (playerHandValue > 21) {
+                        playerDone = true;
+                    } else if (playerHandValue == 21) {
+                        playerDone = true;
                     }
-                }
-                if (playerHandValue > 21) {
-                    playerDone = true;
-                } else if (playerHandValue == 21) {
-                    if (playerCards.size() == 2) {
-                        System.out.println("BLACK JACK!");
-                    }
-                    playerDone = true;
                 }
             }
-            System.out.println();
+            System.out.println("\n".repeat(20));
             System.out.println("-----------------------------");
             System.out.println("Your Cards: ( " + playerHandValue + " )");
             printCards(playerCards, fortuna);
@@ -204,14 +205,16 @@ public class Roulette {
             System.out.println("Dealer's turn");
             // DealerAction
             while (dealerHandValue < 17) {
+                System.out.println("Dealer draw a card");
                 dealerCards.add(drawCard(fortuna));
                 dealerHandValue = cardValue(dealerCards);
                 System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
                 printCards(dealerCards, fortuna);
                 System.out.println();
-                System.out.println("-----------");
+                System.out.println("-----------------------------");
             }
 
+            System.out.println("-$-$-$-$-$-$-$-$-$-$-$-$-$-$-");
             System.out.println("Dealer have " + dealerHandValue);
             System.out.println("You have " + playerHandValue);
             System.out.print(" --- ");
@@ -327,6 +330,11 @@ public class Roulette {
             System.out.println("---------------------------");
             System.out.println("You have now " + money + "$");
             System.out.println("---------------------------");
+            System.out.println("Do you want to continue?(Y/N)");
+            // nextYN: yes == true, no == false
+            if (!gs.nextYN()) {
+                break Roulette;
+            }
 
         } while (money > 0);
         System.out.println("You are leaving the roulette table.");
