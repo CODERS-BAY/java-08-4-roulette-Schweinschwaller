@@ -108,6 +108,7 @@ public class Roulette {
             int setCommitment = 0;
             ArrayList<Integer> playerCards = new ArrayList<Integer>();
             ArrayList<Integer> dealerCards = new ArrayList<Integer>();
+            // Set the commitment
             do {
                 System.out.println("how much you want to set?");
                 setCommitment = gs.nextInt();
@@ -115,19 +116,20 @@ public class Roulette {
                     break BlackJack;
                 }
             } while (setCommitment > money || setCommitment <= 0);
-
-            boolean playerDone = false;
             money -= setCommitment;
+            // draw the Cards
             playerCards.add(drawCard(fortuna));
             playerCards.add(drawCard(fortuna));
             int playerHandValue = cardValue(playerCards);
             dealerCards.add(drawCard(fortuna));
             printCards(dealerCards, fortuna);
             System.out.println();
+            // if the dealer have the change of a Black Jack you can exit with the half of your commitment
+            boolean playerDone = false;
             if (dealerCards.get(0) >= 8) {
                 System.out.println("The Dealer have 10 and coud have a ACE next.");
                 System.out.println("Do you want to playe save and get the half of you commitment back? (Y/N)");
-                // nextYN: yes = true, no =false
+                // nextYN: yes == true, no == false
                 playerDone = gs.nextYN();
                 if (playerDone) {
                     money += setCommitment / 2;
@@ -237,7 +239,7 @@ public class Roulette {
             }
             System.out.println(" --- ");
             System.out.println("Do you want to continue?(Y/N)");
-            // nextYN: yes = true, no =false
+            // nextYN: yes == true, no == false
             if (!gs.nextYN()) {
                 break BlackJack;
             }
@@ -251,9 +253,6 @@ public class Roulette {
     }
 
     public static int playRoulette(int money, GScanner gs, Random fortuna) {
-        int setCommitment = 0;
-        int menu = 0;
-        int chosenNumber = 0;
 
         System.out.println("\n".repeat(20));
         System.out.println("##########################################################");
@@ -263,6 +262,7 @@ public class Roulette {
 
         Roulette:
         do {
+            int setCommitment = 0;
             System.out.println("Faites vos jeux!(Make your bets!)");
             do {
                 System.out.println("how much you want to set?");
@@ -274,6 +274,7 @@ public class Roulette {
             } while (setCommitment > money || setCommitment <= 0);
 
             money -= setCommitment;
+            int menu = 0;
             do {
                 System.out.println("1. red numbers");
                 System.out.println("2. black numbers");
@@ -287,6 +288,7 @@ public class Roulette {
                 }
             } while (menu <= 0 || menu > 6);
 
+            int chosenNumber = 0;
             if (menu == 6) {
                 do {
                     System.out.println("Witch number?");
@@ -297,6 +299,7 @@ public class Roulette {
                 } while (chosenNumber < 0 || chosenNumber > 36);
             }
             System.out.println("Rien ne va plus(No more bets)");
+            // spin the bullet
             int fortunaChoice = fortuna.nextInt(37);
             System.out.print("\n" + fortunaChoice + " ");
             if (fortunaChoice == 0) {
@@ -307,6 +310,7 @@ public class Roulette {
             }
             System.out.println("is the Winning number!!");
 
+            // evaluation of the number and the players bet
             if (menu == 6 && chosenNumber == fortunaChoice) {
                 money += setCommitment * 36;
             } else if (menu == 3 && (fortunaChoice <= 12 && fortunaChoice >= 1)) {
