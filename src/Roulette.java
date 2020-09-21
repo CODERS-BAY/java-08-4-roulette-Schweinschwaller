@@ -11,6 +11,7 @@ public class Roulette {
         System.out.println();
         System.out.println("How much money do you want to change in chips?!");
 
+        // User Input --> how many chips
         GScanner gs = new GScanner();
         int money = gs.nextInt();
         if (money > 100) {
@@ -21,6 +22,7 @@ public class Roulette {
 
         Random fortuna = new Random();
         boolean wantToLeave = false;
+        //menu --> what do you want to play
         do {
             System.out.println("Chose a GAME");
             System.out.println("------------");
@@ -41,8 +43,8 @@ public class Roulette {
     }
 
     //####################################//
-//   Black Jack                       //
-//####################################//
+    //   Black Jack                       //
+    //####################################//
     public static int drawCard(Random fortuna) {
         return fortuna.nextInt(13);
     }
@@ -50,34 +52,35 @@ public class Roulette {
     public static void printCards(ArrayList<Integer> cards, Random fortuna) {
         for (int i = 0; i < cards.size(); i++) {
             switch (cards.get(i)) {
-                case 0 -> System.out.print("|2|");
-                case 1 -> System.out.print("|3|");
-                case 2 -> System.out.print("|4|");
-                case 3 -> System.out.print("|5|");
-                case 4 -> System.out.print("|6|");
-                case 5 -> System.out.print("|7|");
-                case 6 -> System.out.print("|8|");
-                case 7 -> System.out.print("|9|");
-                case 8 -> System.out.print("|10|");
-                case 9 -> System.out.print("|J|");
-                case 10 -> System.out.print("|D|");
-                case 11 -> System.out.print("|K|");
-                case 12 -> {
+                case 0 -> System.out.print("\uD83C\uDCA2"); // 2 card symbol unicode
+                case 1 -> System.out.print("\uD83C\uDCA3"); // 3
+                case 2 -> System.out.print("\uD83C\uDCA4"); // 4
+                case 3 -> System.out.print("\uD83C\uDCA5"); // 5
+                case 4 -> System.out.print("\uD83C\uDCA6"); // 6
+                case 5 -> System.out.print("\uD83C\uDCA7"); // 7
+                case 6 -> System.out.print("\uD83C\uDCA8"); // 8
+                case 7 -> System.out.print("\uD83C\uDCA9"); // 9
+                case 8 -> System.out.print("\uD83C\uDCAA"); // 10
+                case 9 -> System.out.print("\uD83C\uDCAB"); // J
+                case 10 -> System.out.print("\uD83C\uDCAD"); // D
+                case 11 -> System.out.print("\uD83C\uDCAE"); // K
+                case 12 -> {                                 // ace
                     int help = fortuna.nextInt(4);
                     if (help == 0) {
-                        System.out.print("|♥|");
+                        System.out.print("\uD83C\uDCB1");
                     } else if (help == 1) {
-                        System.out.print("|♦|");
+                        System.out.print("\uD83C\uDCC1");
                     } else if (help == 2) {
-                        System.out.print("|♣|");
+                        System.out.print("\uD83C\uDCD1");
                     } else {
-                        System.out.print("|♠|");
+                        System.out.print("\uD83C\uDCA1");
                     }
                 }
             }
             System.out.print("  ");
         }
     }
+
     public static int cardValue(ArrayList<Integer> cards) {
         // in Black Jack the Cards from 2 until 10 have the value of it self.
         // J D K have the value of 10
@@ -105,6 +108,7 @@ public class Roulette {
         }
         return value;
     }
+
     public static int playBlackJack(int money, GScanner gs, Random fortuna) {
 
         System.out.println("\n".repeat(20));
@@ -148,6 +152,7 @@ public class Roulette {
             dealerCards.add(drawCard(fortuna));
             int dealerHandValue = cardValue(dealerCards);
 
+            // player and dealer have each two cards
             System.out.println("Dealer Cards: ( " + dealerHandValue + " )");
             printCards(dealerCards, fortuna);
             System.out.println();
@@ -161,6 +166,7 @@ public class Roulette {
                 int menu = 0;
                 playerAction:
                 while (!playerDone) {
+                    // the actions of the players
                     int input = 0;
                     do {
                         System.out.println("1. hit");
@@ -205,6 +211,8 @@ public class Roulette {
                     }
                 }
             }
+            // output of the result of the players action
+            // repeat 20 is my version of a clear console
             System.out.println("\n".repeat(20));
             System.out.println("-----------------------------");
             System.out.println("Your Cards: ( " + playerHandValue + " )");
@@ -224,11 +232,13 @@ public class Roulette {
                 System.out.println("-----------------------------");
             }
 
+            // output after the Dealer is finish with hius action
             System.out.println("-$-$-$-$-$-$-$-$-$-$-$-$-$-$-");
             System.out.println("Dealer have " + dealerHandValue);
             System.out.println("You have " + playerHandValue);
             System.out.print(" --- ");
 
+            // how wons?
             if (playerHandValue > 21) {
                 System.out.print("dealer wins");
             } else if (dealerHandValue > 21) {
@@ -267,8 +277,8 @@ public class Roulette {
     }
 
     //####################################//
-//   Roulette                         //
-//####################################//
+    //   Roulette                         //
+    //####################################//
     public static int playRoulette(int money, GScanner gs, Random fortuna) {
 
         System.out.println("\n".repeat(20));
@@ -279,6 +289,7 @@ public class Roulette {
 
         Roulette:
         do {
+            // set the value of the Commitment
             int setCommitment = 0;
             System.out.println("Faites vos jeux!(Make your bets!)");
             do {
@@ -289,8 +300,8 @@ public class Roulette {
                     break Roulette;
                 }
             } while (setCommitment > money || setCommitment <= 0);
-
             money -= setCommitment;
+            // menu for the bet
             int menu = 0;
             do {
                 System.out.println("1. red numbers");
